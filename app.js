@@ -189,19 +189,25 @@
   let touchMoved     = 0;
   let touchDragX     = 0;
   let touchDragY     = 0;
+  let touchStartY0   = 0;  // initial Y, used to detect pull-to-refresh gesture
 
   canvas.addEventListener('touchstart', (e) => {
-    e.preventDefault();
     if (e.touches.length !== 1) return;
+    touchStartY0   = e.touches[0].clientY;
     touchStartTime = Date.now();
     touchMoved     = 0;
     touchDragX     = e.touches[0].clientX;
     touchDragY     = e.touches[0].clientY;
+    // Allow pull-to-refresh: don't block touches starting near the top of the screen.
+    if (touchStartY0 > 80) e.preventDefault();
   }, { passive: false });
 
   canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
     if (e.touches.length !== 1) return;
+    // If the swipe started near the top and is moving downward, let the
+    // browser handle it as pull-to-refresh.
+    if (touchStartY0 <= 80 && e.touches[0].clientY > touchStartY0) return;
+    e.preventDefault();
     const dx = e.touches[0].clientX - touchDragX;
     const dy = e.touches[0].clientY - touchDragY;
     touchMoved += Math.abs(dx) + Math.abs(dy);

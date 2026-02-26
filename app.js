@@ -112,9 +112,10 @@
     const worldH = (bounds.bottom - bounds.top) + 1.0;
     scaling = canvas.height / worldH;
 
-    // Centre horizontally; place top near the top with a half-cell margin.
+    // Centre horizontally, accounting for the 0.25-margin ox shift in draw().
+    // Effective world centre = 0.25 + worldW/2; map that to canvas centre.
     const worldW = bounds.right - bounds.left;
-    offsetX = (canvas.width - worldW * scaling) / 2 - bounds.left * scaling;
+    offsetX = canvas.width / 2 - (0.25 + worldW / 2) * scaling;
     offsetY = (0.5 - bounds.top) * scaling;
   }
 

@@ -97,7 +97,9 @@ const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun',
                      'Jul','Aug','Sep','Oct','Nov','Dec'];
 
 // Zodiac sign symbols, indexed by mTropicalPhase (0–11).
-const SIGN_SYMBOL = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+// \uFE0E (text variation selector) forces monochrome text rendering on phones.
+const SIGN_SYMBOL = ['♈\uFE0E','♉\uFE0E','♊\uFE0E','♋\uFE0E','♌\uFE0E','♍\uFE0E',
+                     '♎\uFE0E','♏\uFE0E','♐\uFE0E','♑\uFE0E','♒\uFE0E','♓\uFE0E'];
 
 // Moon phase symbols, indexed by octant 0–7 (Astro.moonPhase_().p).
 // Note: mLunarPhase is quarter (0–3); use Astro.moonPhase_() for the full 8-value index.
@@ -109,8 +111,9 @@ const moonPhasesText  = ['◯','◐','◑','●','◕','◔','◓','◒'];
 // Moon Phases - Emoji (color)
 const moonPhasesEmoji = ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
 
-// Zodiac Signs - Text (monochrome Unicode)
-const zodiacText  = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+// Zodiac Signs - Text (monochrome Unicode, \uFE0E forces text presentation)
+const zodiacText  = ['♈\uFE0E','♉\uFE0E','♊\uFE0E','♋\uFE0E','♌\uFE0E','♍\uFE0E',
+                     '♎\uFE0E','♏\uFE0E','♐\uFE0E','♑\uFE0E','♒\uFE0E','♓\uFE0E'];
 
 // Zodiac Signs - Emoji (color)
 const zodiacEmoji = ['♈️','♉️','♊️','♋️','♌️','♍️','♎️','♏️','♐️','♑️','♒️','♓️'];

@@ -332,7 +332,7 @@ class CalendarDate {
     // Phase start: opening octant emoji at left; phase end: closing octant at right.
     // x + 1/12 is left of centre; x + 1/4 is right of centre (symmetric around x+1/6).
     if (showMoonSymbols) {
-      ctx.font = '0.25px sans-serif';
+      ctx.font = '0.125px sans-serif';
       ctx.fillStyle = 'black';
       ctx.textBaseline = 'middle';
       if (this.mIsPhaseStart) {

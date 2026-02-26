@@ -244,7 +244,8 @@
   const goBtn        = document.getElementById('go-btn');
   const openBtn      = document.getElementById('open-picker');
   const closeBtn     = document.getElementById('close-picker');
-  const splitDaysChk = document.getElementById('split-days');
+  const splitDaysChk  = document.getElementById('split-days');
+  const phaseTicksChk = document.getElementById('phase-ticks');
 
   function showOverlay() { overlay.classList.remove('hidden'); }
   function hideOverlay()  { overlay.classList.add('hidden');    }
@@ -276,9 +277,14 @@
   closeBtn.addEventListener('click', hideOverlay);
   openBtn.addEventListener('click', showOverlay);
 
-  // splitDays is declared in calendarDate.js; toggling only needs a redraw.
+  // splitDays and phaseTicks are declared in calendarDate.js; toggling only needs a redraw.
   splitDaysChk.addEventListener('change', () => {
     splitDays = splitDaysChk.checked;
+    markDirty();
+  });
+
+  phaseTicksChk.addEventListener('change', () => {
+    phaseTicks = phaseTicksChk.checked;
     markDirty();
   });
 

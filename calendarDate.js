@@ -73,7 +73,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Runtime toggle — read by render(), can be changed without rebuilding season.
-let splitDays = true;
+let splitDays   = true;
+let phaseTicks  = true;
 
 const SIGN_COLOR = [
   '#99FFCC',  // 0  Aries
@@ -271,7 +272,7 @@ class CalendarDate {
     }
 
     // ── Phase-start triangle (new moon, first quarter, last quarter) ─────────
-    if (this.mIsPhaseStart) {
+    if (phaseTicks && this.mIsPhaseStart) {
       const base = 1 / 18;
       const h    = 2 / 18;
       const cx   = x + 0.5 * this.mPhaseFraction;

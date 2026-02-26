@@ -334,12 +334,15 @@ class CalendarDate {
     if (showMoonSymbols) {
       ctx.font = '0.125px sans-serif';
       ctx.fillStyle = 'black';
-      ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       if (this.mIsPhaseStart) {
-        ctx.fillText(MOON_SYMBOL[this.mLunarPhase * 2],     x + 1/12, y + 0.25);
+        // Right-align against the left edge of the parallelogram at mid-height.
+        ctx.textAlign = 'right';
+        ctx.fillText(MOON_SYMBOL[this.mLunarPhase * 2],     x - 1/12, y + 0.25);
       } else if (this.mIsPhaseEnd) {
-        ctx.fillText(MOON_SYMBOL[this.mLunarPhase * 2 + 1], x + 1/4,  y + 0.25);
+        // Left-align against the right edge of the parallelogram at mid-height.
+        ctx.textAlign = 'left';
+        ctx.fillText(MOON_SYMBOL[this.mLunarPhase * 2 + 1], x + 0.5 - 1/12, y + 0.25);
       }
     }
 

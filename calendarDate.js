@@ -325,7 +325,8 @@ class CalendarDate {
       label  = SIGN_SYMBOL[this.mTropicalPhase];
       isBold = false;
     }
-    ctx.font = (isBold ? 'bold ' : '') + '0.25px Cambria, Georgia, serif';
+    const fontSize = (label === this.mDate) ? '0.25px' : '0.42px';
+    ctx.font = (isBold ? 'bold ' : '') + fontSize + ' Cambria, Georgia, serif';
     ctx.fillStyle = this.mIsSunday ? 'red' : 'black';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';

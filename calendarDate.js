@@ -103,6 +103,31 @@ const SIGN_SYMBOL = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑'
 // Note: mLunarPhase is quarter (0–3); use Astro.moonPhase_() for the full 8-value index.
 const MOON_SYMBOL = ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
 
+// Moon Phases - Text (monochrome Unicode)
+const moonPhasesText  = ['◯','◐','◑','●','◕','◔','◓','◒'];
+
+// Moon Phases - Emoji (color)
+const moonPhasesEmoji = ['🌑','🌒','🌓','🌔','🌕','🌖','🌗','🌘'];
+
+// Zodiac Signs - Text (monochrome Unicode)
+const zodiacText  = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+
+// Zodiac Signs - Emoji (color)
+const zodiacEmoji = ['♈️','♉️','♊️','♋️','♌️','♍️','♎️','♏️','♐️','♑️','♒️','♓️'];
+
+// Zodiac Sign Names
+const zodiacNames = [
+  'Aries', 'Taurus', 'Gemini', 'Cancer',
+  'Leo', 'Virgo', 'Libra', 'Scorpio',
+  'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces',
+];
+
+// Moon Phase Names
+const moonPhaseNames = [
+  'New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous',
+  'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent',
+];
+
 // Full parallelogram path at (x, y).
 // Width 0.5, height 0.5, left edge slants 1/6 leftward per row.
 function pgram(ctx, x, y) {

@@ -112,9 +112,10 @@
     const worldH = (bounds.bottom - bounds.top) + 1.0;
     scaling = canvas.height / worldH;
 
-    // Align top-left of season grid to the margin.
-    offsetX = (0.25 - bounds.left) * scaling;
-    offsetY = 0.5 * scaling;
+    // Centre horizontally; place top near the top with a half-cell margin.
+    const worldW = bounds.right - bounds.left;
+    offsetX = (canvas.width - worldW * scaling) / 2 - bounds.left * scaling;
+    offsetY = (0.5 - bounds.top) * scaling;
   }
 
   function updateHeader() {

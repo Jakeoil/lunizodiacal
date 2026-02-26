@@ -7,16 +7,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div id="header">
+    <button id="open-picker">&#128197;</button>
+    <span id="season-label"></span>
+  </div>
   <canvas id="calendar"></canvas>
   <div id="picker-overlay">
+    <button id="close-picker" aria-label="Close">&#10005;</button>
     <h2>Coylendar</h2>
     <input type="date" id="date-input">
     <div class="picker-buttons">
       <button id="today-btn">Today</button>
       <button id="go-btn">Go</button>
     </div>
+    <div class="picker-settings">
+      <label>
+        <input type="checkbox" id="split-days" checked>
+        Split sign/season changes
+      </label>
+    </div>
   </div>
-  <button id="open-picker">&#128197;</button>
   <script src="astro.js"></script>
   <script src="calendarDate.js"></script>
   <script src="app.js"></script>

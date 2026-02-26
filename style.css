@@ -5,17 +5,63 @@
 }
 
 body {
-  background: #111;
+  background: #999;
   overflow: hidden;
   width: 100vw;
   height: 100vh;
 }
 
+/* ── Header ─────────────────────────────────────────────────────────────── */
+
+#header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 44px;
+  background: #888;
+  border-bottom: 1px solid #777;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  z-index: 5;
+}
+
+#season-label {
+  flex: 1;
+  text-align: center;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  color: #222;
+}
+
+#open-picker {
+  background: none;
+  border: 1px solid #666;
+  border-radius: 4px;
+  color: #333;
+  font-size: 1.1rem;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+#open-picker:hover {
+  background: #777;
+}
+
+/* ── Canvas ─────────────────────────────────────────────────────────────── */
+
 #calendar {
   display: block;
+  position: fixed;
+  top: 44px;
+  left: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 44px);
 }
+
+/* ── Date picker overlay ────────────────────────────────────────────────── */
 
 #picker-overlay {
   position: fixed;
@@ -33,6 +79,10 @@ body {
   min-width: 220px;
 }
 
+#picker-overlay.hidden {
+  display: none;
+}
+
 #picker-overlay h2 {
   color: #eee;
   font-family: Georgia, serif;
@@ -41,8 +91,20 @@ body {
   letter-spacing: 0.05em;
 }
 
-#picker-overlay.hidden {
-  display: none;
+#close-picker {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #aaa;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+#close-picker:hover {
+  color: #fff;
 }
 
 #date-input {
@@ -60,8 +122,8 @@ body {
   gap: 8px;
 }
 
-.picker-buttons button,
-#open-picker {
+.picker-buttons button {
+  flex: 1;
   background: #333;
   color: #eee;
   border: 1px solid #666;
@@ -71,24 +133,22 @@ body {
   font-size: 0.95rem;
 }
 
-.picker-buttons button:hover,
-#open-picker:hover {
+.picker-buttons button:hover {
   background: #444;
 }
 
-#today-btn {
-  flex: 1;
+.picker-settings {
+  border-top: 1px solid #444;
+  padding-top: 10px;
 }
 
-#go-btn {
-  flex: 1;
-}
-
-#open-picker {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 10;
-  font-size: 1.2rem;
-  padding: 6px 10px;
+.picker-settings label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ccc;
+  font-family: Georgia, serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+  user-select: none;
 }

@@ -17,7 +17,6 @@ Visual markers:
 Open `index.html` in any modern browser — no build step, no dependencies.
 
 - **Pan**: drag to scroll
-- **Zoom**: scroll wheel (desktop) or pinch (mobile)
 - **Next season**: single click/tap on the canvas
 - **Previous season**: double click/double tap on the canvas
 - **Jump to date**: use the date picker overlay (reopened via the 📅 button)
@@ -29,7 +28,7 @@ index.html        Full-screen canvas + date picker overlay
 style.css         Minimal styling
 astro.js          Astronomical math (sun angle, moon phase, zodiac sign)
 calendarDate.js   Day cell data model and parallelogram rendering
-app.js            Canvas orchestration, pan/zoom, season navigation
+app.js            Canvas orchestration, pan, season navigation
 ```
 
 ## Astronomical math
@@ -46,3 +45,8 @@ All values are computed at the *end* of each calendar day (local midnight + 24 h
 ## Origin
 
 Web port of the CoylendarMax Android app (Java/Canvas), which itself implements a lunisolar calendar showing the interplay of the tropical solar year and the synodic lunar cycle.
+
+## Wish list
+
+- **Zoom** — scroll wheel (desktop) / pinch (mobile); infrastructure is straightforward, deferred for now
+- **D3.js renderer** — replace the Canvas 2D renderer with D3/SVG to get free per-cell interactivity (hover, tooltips, click-to-expand) as more day-level detail is added; the astronomical math and cell geometry stay unchanged, only `app.js` rendering changes

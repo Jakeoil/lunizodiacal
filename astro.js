@@ -7,11 +7,12 @@ const SMALL_FLOAT = 1e-12;
 
 const Astro = {
 
-  // Returns timezone offset in minutes (positive = west of UTC, like Java's behavior)
+  // Returns the DST-adjusted UTC offset for the given date, in minutes west of
+  // UTC (positive = west). Matches Java's toUtcMinutes(), which takes the raw
+  // standard-time offset and explicitly adds getDSTSavings() when the date
+  // falls in daylight time. JS Date.getTimezoneOffset() does the same thing
+  // automatically — it returns the DST-adjusted offset for that specific date.
   toUtcMinutes(date) {
-    // JS getTimezoneOffset() returns minutes west of UTC (positive for west)
-    // Java's getRawOffset() returns milliseconds east of UTC
-    // We need to negate to match Java behavior: Java returns -offset/60000
     return date.getTimezoneOffset();
   },
 

@@ -314,19 +314,12 @@ class CalendarDate {
       ctx.fill();
     }
 
-    // ── Date label / symbol ──────────────────────────────────────────────────
-    // Sign symbol replaces the date on sign-change days; moon symbols replace
-    // it on the first and last day of each lunar phase week.
+    // ── Date label / sign symbol ─────────────────────────────────────────────
+    // Sign symbol replaces the date number on sign-change days.
     let label  = this.mDate;
     let isBold = this.mBold;
     if (showSignSymbols && this.mSplitFraction !== null) {
       label  = SIGN_SYMBOL[this.mTropicalPhase];
-      isBold = false;
-    } else if (showMoonSymbols && this.mIsPhaseStart) {
-      label  = MOON_SYMBOL[this.mLunarPhase * 2];        // even octant: phase start
-      isBold = false;
-    } else if (showMoonSymbols && this.mIsPhaseEnd) {
-      label  = MOON_SYMBOL[this.mLunarPhase * 2 + 1];   // odd octant: phase end
       isBold = false;
     }
     ctx.font = (isBold ? 'bold ' : '') + '0.25px Cambria, Georgia, serif';
@@ -334,6 +327,21 @@ class CalendarDate {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(label, x + (1/6), y + 0.25);
+
+    // ── Moon phase symbols (half size, left/right of cell) ───────────────────
+    // Phase start: opening octant emoji at left; phase end: closing octant at right.
+    // x + 1/12 is left of centre; x + 1/4 is right of centre (symmetric around x+1/6).
+    if (showMoonSymbols) {
+      ctx.font = '0.125px sans-serif';
+      ctx.fillStyle = 'black';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      if (this.mIsPhaseStart) {
+        ctx.fillText(MOON_SYMBOL[this.mLunarPhase * 2],     x + 1/12, y + 0.25);
+      } else if (this.mIsPhaseEnd) {
+        ctx.fillText(MOON_SYMBOL[this.mLunarPhase * 2 + 1], x + 1/4,  y + 0.25);
+      }
+    }
 
     ctx.restore();
   }

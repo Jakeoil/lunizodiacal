@@ -108,15 +108,20 @@
 
   // Scale and position so the full season fits in the canvas with small margins.
   function centreOnSeason() {
-    // Vertical: fit the season height (plus 0.5 top + 0.5 bottom margin) to canvas.
+    const worldW = bounds.right - bounds.left;
     const worldH = (bounds.bottom - bounds.top) + 1.0;
-    scaling = canvas.height / worldH;
+
+    // Use whichever dimension is the tighter constraint, then pull back slightly.
+    const scaleH = canvas.height / worldH;
+    const scaleW = canvas.width  / (worldW + 0.5);  // 0.25 margin each side
+    scaling = Math.min(scaleH, scaleW) * 0.93;
 
     // Centre horizontally, accounting for the 0.25-margin ox shift in draw().
-    // Effective world centre = 0.25 + worldW/2; map that to canvas centre.
-    const worldW = bounds.right - bounds.left;
-    offsetX = canvas.width / 2 - (0.25 + worldW / 2) * scaling;
-    offsetY = (0.5 - bounds.top) * scaling;
+    offsetX = canvas.width  / 2 - (0.25 + worldW / 2) * scaling;
+
+    // Top of season at half a cell height (0.25 world units) from the top edge.
+    // First cell's effective world y = oy(0.5) + bounds.top; pin that to 0.25*scaling px.
+    offsetY = (-0.25 - bounds.top) * scaling;
   }
 
   function updateHeader() {

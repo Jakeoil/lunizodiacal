@@ -73,8 +73,10 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Runtime toggle — read by render(), can be changed without rebuilding season.
-let splitDays   = true;
-let phaseTicks  = true;
+let splitDays     = true;
+let phaseTicks    = true;
+let showMoonSymbols = true;
+let showSignSymbols = true;
 
 const SIGN_COLOR = [
   '#99FFCC',  // 0  Aries
@@ -147,8 +149,9 @@ class CalendarDate {
 
     // Placed by next() or constructSeason.
     this.mPlace = { x: 0, y: 0 };
-    // Set by next() when this day is the first day of a new lunar phase.
+    // Set by next() when this day starts or ends a lunar phase.
     this.mIsPhaseStart  = false;
+    this.mIsPhaseEnd    = false;
     this.mPhaseFraction = null;
   }
 
@@ -198,6 +201,7 @@ class CalendarDate {
     if (this.lunarPhase === next.lunarPhase) {
       next.mPlace = { x: this.mPlace.x + 0.5,   y: this.mPlace.y };
     } else {
+      this.mIsPhaseEnd    = true;
       next.mIsPhaseStart  = true;
       next.mPhaseFraction = next._findPhaseFraction();
       next.mPlace = { x: this.mPlace.x - 19/6,  y: this.mPlace.y + 0.5 };
@@ -285,12 +289,26 @@ class CalendarDate {
       ctx.fill();
     }
 
-    // ── Date label ───────────────────────────────────────────────────────────
-    ctx.font = (this.mBold ? 'bold ' : '') + '0.25px Cambria, Georgia, serif';
+    // ── Date label / symbol ──────────────────────────────────────────────────
+    // Sign symbol replaces the date on sign-change days; moon symbols replace
+    // it on the first and last day of each lunar phase week.
+    let label  = this.mDate;
+    let isBold = this.mBold;
+    if (showSignSymbols && this.mSplitFraction !== null) {
+      label  = SIGN_SYMBOL[this.mTropicalPhase];
+      isBold = false;
+    } else if (showMoonSymbols && this.mIsPhaseStart) {
+      label  = MOON_SYMBOL[this.mLunarPhase * 2];        // even octant: phase start
+      isBold = false;
+    } else if (showMoonSymbols && this.mIsPhaseEnd) {
+      label  = MOON_SYMBOL[this.mLunarPhase * 2 + 1];   // odd octant: phase end
+      isBold = false;
+    }
+    ctx.font = (isBold ? 'bold ' : '') + '0.25px Cambria, Georgia, serif';
     ctx.fillStyle = this.mIsSunday ? 'red' : 'black';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(this.mDate, x + (1/6), y + 0.25);
+    ctx.fillText(label, x + (1/6), y + 0.25);
 
     ctx.restore();
   }

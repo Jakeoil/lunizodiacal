@@ -249,8 +249,10 @@
   const goBtn        = document.getElementById('go-btn');
   const openBtn      = document.getElementById('open-picker');
   const closeBtn     = document.getElementById('close-picker');
-  const splitDaysChk  = document.getElementById('split-days');
-  const phaseTicksChk = document.getElementById('phase-ticks');
+  const splitDaysChk   = document.getElementById('split-days');
+  const phaseTicksChk  = document.getElementById('phase-ticks');
+  const moonSymbolsChk = document.getElementById('moon-symbols');
+  const signSymbolsChk = document.getElementById('sign-symbols');
 
   function showOverlay() { overlay.classList.remove('hidden'); }
   function hideOverlay()  { overlay.classList.add('hidden');    }
@@ -290,6 +292,16 @@
 
   phaseTicksChk.addEventListener('change', () => {
     phaseTicks = phaseTicksChk.checked;
+    markDirty();
+  });
+
+  moonSymbolsChk.addEventListener('change', () => {
+    showMoonSymbols = moonSymbolsChk.checked;
+    markDirty();
+  });
+
+  signSymbolsChk.addEventListener('change', () => {
+    showSignSymbols = signSymbolsChk.checked;
     markDirty();
   });
 

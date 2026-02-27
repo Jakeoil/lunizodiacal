@@ -326,7 +326,7 @@ class CalendarDate {
       isBold = false;
     }
     const fontSize = (label === this.mDate) ? '0.25px' : '0.42px';
-    ctx.font = (isBold ? 'bold ' : '') + fontSize + ' Cambria, Georgia, serif';
+    ctx.font = (isBold ? 'bold ' : '') + fontSize + " 'EB Garamond', Georgia, serif";
     ctx.fillStyle = this.mIsSunday ? 'red' : 'black';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';

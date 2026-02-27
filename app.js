@@ -316,10 +316,14 @@
   });
 
   // ── Bootstrap ─────────────────────────────────────────────────────────────
+  // Wait for web fonts (EB Garamond) before the first render so canvas draws
+  // with the correct glyphs and metrics from the start.
 
   resizeCanvas();
   dateInput.value = formatDateValue(targetDate);
-  loadSeason(targetDate);
-  showOverlay();
+  document.fonts.ready.then(() => {
+    loadSeason(targetDate);
+    showOverlay();
+  });
 
 }());

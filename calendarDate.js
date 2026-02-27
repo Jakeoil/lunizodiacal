@@ -327,10 +327,14 @@ class CalendarDate {
     }
     const fontSize = (label === this.mDate) ? '0.25px' : '0.42px';
     ctx.font = (isBold ? 'bold ' : '') + fontSize + " 'EB Garamond', Georgia, serif";
+    if ('fontVariantNumeric' in ctx) ctx.fontVariantNumeric = 'oldstyle-nums';
     ctx.fillStyle = this.mIsSunday ? 'red' : 'black';
     ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(label, x + (1/6), y + 0.25);
+    ctx.textBaseline = 'alphabetic';
+    // Centre on actual ink bounds rather than em-square (fixes Safari alignment).
+    const m  = ctx.measureText(label);
+    const ty = y + 0.25 + (m.actualBoundingBoxDescent - m.actualBoundingBoxAscent) / 2;
+    ctx.fillText(label, x + (1/6), ty);
 
     // ── Moon phase symbols (half size, left/right of cell) ───────────────────
     // Phase start: opening octant emoji at left; phase end: closing octant at right.

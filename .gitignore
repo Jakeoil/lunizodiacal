@@ -1,3 +1,7 @@
 CoylendarMax/
 .DS_Store
 .venv/
+node_modules/
+.claude/worktrees/
+test_astro.py
+test_moon.py

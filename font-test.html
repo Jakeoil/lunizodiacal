@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Font Comparison</title>
+  <style>
+    @font-face {
+      font-family: 'STIXTwo';
+      src: url('fonts/STIXTwoText-Regular.otf') format('opentype');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'STIXTwo';
+      src: url('fonts/STIXTwoText-Bold.otf') format('opentype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'CrimsonPro';
+      src: url('fonts/CrimsonPro-Regular.otf') format('opentype');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'CrimsonPro';
+      src: url('fonts/CrimsonPro-Bold.otf') format('opentype');
+      font-weight: 700;
+    }
+    @font-face {
+      font-family: 'EBGaramond';
+      src: url('fonts/EBGaramond-Regular.otf') format('opentype');
+      font-weight: 400;
+    }
+    @font-face {
+      font-family: 'EBGaramond';
+      src: url('fonts/EBGaramond-Bold.otf') format('opentype');
+      font-weight: 700;
+    }
+
+    * { box-sizing: border-box; }
+    body { background: #fff; margin: 0; padding: 12px; }
+    h1 { font-family: sans-serif; font-size: 13px; margin: 0 0 12px; }
+    .section-label { font-family: sans-serif; font-size: 10px; color: #999;
+                     text-transform: uppercase; letter-spacing: .05em;
+                     margin: 16px 0 4px; border-top: 1px solid #eee; padding-top: 8px; }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .cell { border: 1px solid #ddd; padding: 8px; border-radius: 3px; }
+    .fn { font-family: sans-serif; font-size: 10px; color: #888; margin-bottom: 6px; }
+
+    .f0 { font-family: Cambria, Georgia, serif; }
+    .f1 { font-family: 'STIXTwo', Georgia, serif;    font-feature-settings: 'onum' 1; }
+    .f2 { font-family: 'CrimsonPro', Georgia, serif; font-feature-settings: 'onum' 1; }
+    .f3 { font-family: 'EBGaramond', Georgia, serif;  font-feature-settings: 'onum' 1; }
+
+    .lg { font-size: 40px; line-height: 1.2; }
+    .md { font-size: 26px; line-height: 1.35; }
+    .b  { font-weight: 700; }
+    /* all-small-caps: both upper and lower become small-caps height */
+    .sc { font-variant-caps: all-small-caps; }
+  </style>
+</head>
+<body>
+
+<h1>Font Comparison — Cambria · STIX Two · Crimson Pro · EB Garamond &nbsp;
+  <span style="font-family:sans-serif;font-size:11px;color:#999">(all three candidates = full OTF)</span>
+</h1>
+
+<!-- Digits -->
+<div class="section-label">Digits — regular &amp; bold</div>
+<div class="grid">
+  <div class="cell"><div class="fn">Cambria</div>
+    <div class="f0 lg">0 1 2 3 4 5 6 7 8 9</div>
+    <div class="f0 lg b">0 1 2 3 4 5 6 7 8 9</div>
+  </div>
+  <div class="cell"><div class="fn">STIX Two Text (full OTF, onum)</div>
+    <div class="f1 lg">0 1 2 3 4 5 6 7 8 9</div>
+    <div class="f1 lg b">0 1 2 3 4 5 6 7 8 9</div>
+  </div>
+  <div class="cell"><div class="fn">Crimson Pro (full OTF, onum)</div>
+    <div class="f2 lg">0 1 2 3 4 5 6 7 8 9</div>
+    <div class="f2 lg b">0 1 2 3 4 5 6 7 8 9</div>
+  </div>
+  <div class="cell"><div class="fn">EB Garamond (full OTF, onum)</div>
+    <div class="f3 lg">0 1 2 3 4 5 6 7 8 9</div>
+    <div class="f3 lg b">0 1 2 3 4 5 6 7 8 9</div>
+  </div>
+</div>
+
+<!-- Month bold -->
+<div class="section-label">Month abbreviations — bold</div>
+<div class="grid">
+  <div class="cell"><div class="fn">Cambria</div>
+    <div class="f0 md b">Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</div>
+  </div>
+  <div class="cell"><div class="fn">STIX Two Text</div>
+    <div class="f1 md b">Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</div>
+  </div>
+  <div class="cell"><div class="fn">Crimson Pro</div>
+    <div class="f2 md b">Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</div>
+  </div>
+  <div class="cell"><div class="fn">EB Garamond (full OTF, onum)</div>
+    <div class="f3 md b">Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</div>
+  </div>
+</div>
+
+<!-- Month all-small-caps -->
+<div class="section-label">Month abbreviations — bold all-small-caps (all three letters same height)</div>
+<div class="grid">
+  <div class="cell"><div class="fn">Cambria</div>
+    <div class="f0 md b sc">Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</div>
+  </div>
+  <div class="cell"><div class="fn">STIX Two Text</div>
+    <div class="f1 md b sc">Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</div>
+  </div>
+  <div class="cell"><div class="fn">Crimson Pro</div>
+    <div class="f2 md b sc">Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</div>
+  </div>
+  <div class="cell"><div class="fn">EB Garamond (full OTF, onum)</div>
+    <div class="f3 md b sc">Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec</div>
+  </div>
+</div>
+
+<!-- In-app appearance -->
+<div class="section-label">In-app — date number + month label (bold all-small-caps)</div>
+<div class="grid">
+  <div class="cell"><div class="fn">Cambria</div>
+    <div class="f0 md b sc">1 · Jan</div>
+    <div class="f0 md">2 · 3 · 11 · 12 · 28</div>
+    <div class="f0 md b sc">28 · Feb &nbsp; 31 · Oct</div>
+  </div>
+  <div class="cell"><div class="fn">STIX Two Text</div>
+    <div class="f1 md b sc">1 · Jan</div>
+    <div class="f1 md">2 · 3 · 11 · 12 · 28</div>
+    <div class="f1 md b sc">28 · Feb &nbsp; 31 · Oct</div>
+  </div>
+  <div class="cell"><div class="fn">Crimson Pro</div>
+    <div class="f2 md b sc">1 · Jan</div>
+    <div class="f2 md">2 · 3 · 11 · 12 · 28</div>
+    <div class="f2 md b sc">28 · Feb &nbsp; 31 · Oct</div>
+  </div>
+  <div class="cell"><div class="fn">EB Garamond (full OTF, onum)</div>
+    <div class="f3 md b sc">1 · Jan</div>
+    <div class="f3 md">2 · 3 · 11 · 12 · 28</div>
+    <div class="f3 md b sc">28 · Feb &nbsp; 31 · Oct</div>
+  </div>
+</div>
+
+<!-- Zodiac -->
+<div class="section-label">Zodiac symbols — regular &amp; bold</div>
+<div class="grid">
+  <div class="cell"><div class="fn">Cambria</div>
+    <div class="f0 lg">♈&#xFE0E; ♉&#xFE0E; ♊&#xFE0E; ♋&#xFE0E; ♌&#xFE0E; ♍&#xFE0E; ♎&#xFE0E; ♏&#xFE0E; ♐&#xFE0E; ♑&#xFE0E; ♒&#xFE0E; ♓&#xFE0E;</div>
+    <div class="f0 lg b">♈&#xFE0E; ♉&#xFE0E; ♊&#xFE0E; ♋&#xFE0E; ♌&#xFE0E; ♍&#xFE0E; ♎&#xFE0E; ♏&#xFE0E; ♐&#xFE0E; ♑&#xFE0E; ♒&#xFE0E; ♓&#xFE0E;</div>
+  </div>
+  <div class="cell"><div class="fn">STIX Two Text</div>
+    <div class="f1 lg">♈&#xFE0E; ♉&#xFE0E; ♊&#xFE0E; ♋&#xFE0E; ♌&#xFE0E; ♍&#xFE0E; ♎&#xFE0E; ♏&#xFE0E; ♐&#xFE0E; ♑&#xFE0E; ♒&#xFE0E; ♓&#xFE0E;</div>
+    <div class="f1 lg b">♈&#xFE0E; ♉&#xFE0E; ♊&#xFE0E; ♋&#xFE0E; ♌&#xFE0E; ♍&#xFE0E; ♎&#xFE0E; ♏&#xFE0E; ♐&#xFE0E; ♑&#xFE0E; ♒&#xFE0E; ♓&#xFE0E;</div>
+  </div>
+  <div class="cell"><div class="fn">Crimson Pro</div>
+    <div class="f2 lg">♈&#xFE0E; ♉&#xFE0E; ♊&#xFE0E; ♋&#xFE0E; ♌&#xFE0E; ♍&#xFE0E; ♎&#xFE0E; ♏&#xFE0E; ♐&#xFE0E; ♑&#xFE0E; ♒&#xFE0E; ♓&#xFE0E;</div>
+    <div class="f2 lg b">♈&#xFE0E; ♉&#xFE0E; ♊&#xFE0E; ♋&#xFE0E; ♌&#xFE0E; ♍&#xFE0E; ♎&#xFE0E; ♏&#xFE0E; ♐&#xFE0E; ♑&#xFE0E; ♒&#xFE0E; ♓&#xFE0E;</div>
+  </div>
+  <div class="cell"><div class="fn">EB Garamond (full OTF, onum)</div>
+    <div class="f3 lg">♈&#xFE0E; ♉&#xFE0E; ♊&#xFE0E; ♋&#xFE0E; ♌&#xFE0E; ♍&#xFE0E; ♎&#xFE0E; ♏&#xFE0E; ♐&#xFE0E; ♑&#xFE0E; ♒&#xFE0E; ♓&#xFE0E;</div>
+    <div class="f3 lg b">♈&#xFE0E; ♉&#xFE0E; ♊&#xFE0E; ♋&#xFE0E; ♌&#xFE0E; ♍&#xFE0E; ♎&#xFE0E; ♏&#xFE0E; ♐&#xFE0E; ♑&#xFE0E; ♒&#xFE0E; ♓&#xFE0E;</div>
+  </div>
+</div>
+
+<!-- Moon Unicode -->
+<div class="section-label">Moon symbols — plain Unicode (font-rendered)</div>
+<div class="grid">
+  <div class="cell"><div class="fn">Cambria</div><div class="f0 lg">◯  ◑  ●  ◐</div></div>
+  <div class="cell"><div class="fn">STIX Two Text</div><div class="f1 lg">◯  ◑  ●  ◐</div></div>
+  <div class="cell"><div class="fn">Crimson Pro</div><div class="f2 lg">◯  ◑  ●  ◐</div></div>
+  <div class="cell"><div class="fn">EB Garamond</div><div class="f3 lg">◯  ◑  ●  ◐</div></div>
+</div>
+
+<!-- Noto Emoji moon SVGs -->
+<div class="section-label">Noto Emoji moon SVGs — all 8 phases (Apache 2.0 licensed)</div>
+<div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; padding:8px 0;">
+  <div style="text-align:center">
+    <img src="emoji/moon_1f311.svg" width="80" height="80"><div class="fn" style="margin-top:4px">New</div>
+  </div>
+  <div style="text-align:center">
+    <img src="emoji/moon_1f312.svg" width="80" height="80"><div class="fn" style="margin-top:4px">Wax Crescent</div>
+  </div>
+  <div style="text-align:center">
+    <img src="emoji/moon_1f313.svg" width="80" height="80"><div class="fn" style="margin-top:4px">First Quarter</div>
+  </div>
+  <div style="text-align:center">
+    <img src="emoji/moon_1f314.svg" width="80" height="80"><div class="fn" style="margin-top:4px">Wax Gibbous</div>
+  </div>
+  <div style="text-align:center">
+    <img src="emoji/moon_1f315.svg" width="80" height="80"><div class="fn" style="margin-top:4px">Full</div>
+  </div>
+  <div style="text-align:center">
+    <img src="emoji/moon_1f316.svg" width="80" height="80"><div class="fn" style="margin-top:4px">Wan Gibbous</div>
+  </div>
+  <div style="text-align:center">
+    <img src="emoji/moon_1f317.svg" width="80" height="80"><div class="fn" style="margin-top:4px">Last Quarter</div>
+  </div>
+  <div style="text-align:center">
+    <img src="emoji/moon_1f318.svg" width="80" height="80"><div class="fn" style="margin-top:4px">Wan Crescent</div>
+  </div>
+</div>
+
+<!-- Noto Emoji on canvas via drawImage -->
+<div class="section-label">Noto Emoji moons on canvas via drawImage (4 phases used in app)</div>
+<canvas id="cv-moon" width="500" height="100"></canvas>
+
+<!-- Canvas -->
+<div class="section-label">Canvas rendering (onum via fontVariantNumeric; small-caps via bold small-caps + lowercase)</div>
+<div class="grid">
+  <div class="cell"><div class="fn">Cambria</div><canvas id="cv0" width="280" height="220"></canvas></div>
+  <div class="cell"><div class="fn">STIX Two Text</div><canvas id="cv1" width="280" height="220"></canvas></div>
+  <div class="cell"><div class="fn">Crimson Pro</div><canvas id="cv2" width="280" height="220"></canvas></div>
+  <div class="cell"><div class="fn">EB Garamond (full OTF, onum)</div><canvas id="cv3" width="280" height="220"></canvas></div>
+</div>
+
+<script>
+  function drawSample(id, fam, onum) {
+    const cv  = document.getElementById(id);
+    const ctx = cv.getContext('2d');
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.fillStyle = '#000';
+    ctx.textBaseline = 'middle';
+    if (onum && 'fontVariantNumeric' in ctx) ctx.fontVariantNumeric = 'oldstyle-nums';
+
+    // Regular digits
+    ctx.font = '26px ' + fam;
+    ctx.fillText('0  1  2  3  4  5  6  7  8  9', 6, 22);
+
+    // Bold digits
+    ctx.font = 'bold 26px ' + fam;
+    ctx.fillText('0  1  2  11  28  31', 6, 58);
+
+    // Bold + small-caps month labels (lowercase input → all small caps)
+    ctx.font = 'bold small-caps 26px ' + fam;
+    ctx.fillText('1 · jan    28 · feb    31 · oct', 6, 94);
+
+    // Zodiac regular + bold
+    ctx.font = '34px ' + fam;
+    ctx.fillText('♈\uFE0E ♉\uFE0E ♊\uFE0E ♋\uFE0E ♌\uFE0E ♍\uFE0E', 6, 130);
+    ctx.font = 'bold 34px ' + fam;
+    ctx.fillText('♈\uFE0E ♉\uFE0E ♊\uFE0E ♋\uFE0E ♌\uFE0E ♍\uFE0E', 6, 166);
+
+    // Moon
+    ctx.font = '26px ' + fam;
+    ctx.fillText('◯  ◑  ●  ◐', 6, 200);
+
+    if (onum && 'fontVariantNumeric' in ctx) ctx.fontVariantNumeric = 'normal';
+  }
+
+  // Draw Noto moon SVGs on canvas
+  const moonFiles = ['1f311','1f313','1f315','1f317'];  // new, 1st qtr, full, last qtr
+  const moonCv = document.getElementById('cv-moon');
+  const moonCtx = moonCv.getContext('2d');
+  moonFiles.forEach((code, i) => {
+    const img = new Image();
+    img.onload = () => moonCtx.drawImage(img, i * 110 + 10, 10, 80, 80);
+    img.src = `emoji/moon_${code}.svg`;
+  });
+
+  drawSample('cv0', 'Cambria, Georgia, serif', false);
+
+  document.fonts.ready.then(() => {
+    drawSample('cv1', "'STIXTwo', Georgia, serif",    true);
+    drawSample('cv2', "'CrimsonPro', Georgia, serif", true);
+    drawSample('cv3', "'EBGaramond', Georgia, serif",      true);
+  });
+</script>
+
+</body>
+</html>

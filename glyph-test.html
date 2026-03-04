@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Glyph Path Test</title>
+  <style>
+    body { background: #f8f8f8; margin: 0; padding: 16px; font-family: sans-serif; font-size: 12px; }
+    h2   { font-size: 13px; color: #333; margin: 20px 0 4px; }
+    p    { color: #666; margin: 0 0 8px; font-size: 11px; }
+    canvas { display: block; background: #fff; border: 1px solid #ccc; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+<h2>1. EB Garamond — Old-Style Digits, Regular weight</h2>
+<p>Old-style numerals: 3 4 5 7 9 descend below the red baseline; 0 6 8 sit on it; 1 2 rise above.</p>
+<canvas id="cv-reg" width="820" height="140"></canvas>
+
+<h2>2. EB Garamond — Old-Style Digits, Bold weight</h2>
+<p>Same digits, bold.</p>
+<canvas id="cv-bold" width="820" height="140"></canvas>
+
+<h2>3. Lining (normal font) vs Old-Style — side by side per digit</h2>
+<p>Grey = lining numerals from canvas font rendering. Black = extracted old-style paths. Descenders should be clearly visible on black 3 4 5 7 9.</p>
+<canvas id="cv-cmp" width="820" height="140"></canvas>
+
+<h2>4. Noto Sans Symbols — Zodiac Signs</h2>
+<p>All 12 signs, regular weight.</p>
+<canvas id="cv-zodiac" width="820" height="140"></canvas>
+
+<h2>5. App simulation — digits + zodiac at app proportions</h2>
+<p>Regular date numbers, bold month-start number, then zodiac symbols at larger size.</p>
+<canvas id="cv-app" width="820" height="140"></canvas>
+
+<script src="glyphs.js"></script>
+<script>
+  const UPM = 1000;
+
+  // Draw a single glyph path at position (x, y=top of em square), size = em height in px
+  function drawGlyph(ctx, d, x, topY, emPx, color) {
+    const scale = emPx / UPM;
+    ctx.save();
+    ctx.translate(x, topY);
+    ctx.scale(scale, scale);
+    ctx.fillStyle = color || '#000';
+    ctx.fill(new Path2D(d));
+    ctx.restore();
+  }
+
+  function guides(ctx, baselineY, w) {
+    // Baseline — red
+    ctx.strokeStyle = '#e44';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, baselineY); ctx.lineTo(w, baselineY); ctx.stroke();
+    // Cap-height guide — blue dashed
+    ctx.strokeStyle = '#88f';
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    // EB Garamond capHeight = 0.65 em above baseline
+    const capY = baselineY - 0.65 * emPx;
+    ctx.moveTo(0, capY); ctx.lineTo(w, capY); ctx.stroke();
+    ctx.setLineDash([]);
+    // Labels
+    ctx.fillStyle = '#e44';
+    ctx.font = '9px sans-serif';
+    ctx.fillText('baseline', w - 58, baselineY - 2);
+    ctx.fillStyle = '#88f';
+    ctx.fillText('cap height', w - 65, capY - 2);
+  }
+
+  const emPx     = 80;   // em square = 80px tall
+  const topY     = 20;   // top of em square
+  const baselineY = topY + emPx;  // = 100
+
+  // 1. Regular OSF digits
+  {
+    const cv = document.getElementById('cv-reg');
+    const ctx = cv.getContext('2d');
+    guides(ctx, baselineY, cv.width);
+    for (let i = 0; i <= 9; i++) {
+      const g = Glyphs.digitsReg[i];
+      drawGlyph(ctx, g.d, i * 80 + 10, topY, emPx);
+      ctx.fillStyle = '#999'; ctx.font = '9px sans-serif';
+      ctx.fillText(String(i), i * 80 + 10, 130);
+    }
+  }
+
+  // 2. Bold OSF digits
+  {
+    const cv = document.getElementById('cv-bold');
+    const ctx = cv.getContext('2d');
+    guides(ctx, baselineY, cv.width);
+    for (let i = 0; i <= 9; i++) {
+      const g = Glyphs.digitsBold[i];
+      drawGlyph(ctx, g.d, i * 80 + 10, topY, emPx);
+      ctx.fillStyle = '#999'; ctx.font = '9px sans-serif';
+      ctx.fillText(String(i), i * 80 + 10, 130);
+    }
+  }
+
+  // 3. Lining (grey, via canvas font) vs OSF paths (black)
+  {
+    const cv  = document.getElementById('cv-cmp');
+    const ctx = cv.getContext('2d');
+    guides(ctx, baselineY, cv.width);
+    for (let i = 0; i <= 9; i++) {
+      const x = i * 80 + 10;
+      // Lining numeral via canvas text (grey)
+      ctx.fillStyle = '#bbb';
+      ctx.font = emPx * 0.72 + 'px Cambria, Georgia, serif'; // 72% of em ≈ cap height
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillText(String(i), x, baselineY);
+      // OSF path (black)
+      drawGlyph(ctx, Glyphs.digitsReg[i].d, x, topY, emPx, '#000');
+      ctx.fillStyle = '#999'; ctx.font = '9px sans-serif';
+      ctx.fillText(String(i), x, 130);
+    }
+  }
+
+  // 4. Zodiac
+  {
+    const SIGNS = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+    const cv  = document.getElementById('cv-zodiac');
+    const ctx = cv.getContext('2d');
+    guides(ctx, baselineY, cv.width);
+    for (let i = 0; i < 12; i++) {
+      const g = Glyphs.zodiac[i];
+      drawGlyph(ctx, g.d, i * 67 + 6, topY, emPx);
+      ctx.fillStyle = '#999'; ctx.font = '11px sans-serif';
+      ctx.fillText(SIGNS[i], i * 67 + 6, 130);
+    }
+  }
+
+  // 5. App simulation
+  {
+    const cv  = document.getElementById('cv-app');
+    const ctx = cv.getContext('2d');
+    guides(ctx, baselineY, cv.width);
+    // Regular date numbers
+    [1,2,3,4,5,6,7].forEach((n, i) => {
+      drawGlyph(ctx, Glyphs.digitsReg[n].d, i * 60 + 10, topY, emPx, '#444');
+    });
+    // Bold number at month start
+    drawGlyph(ctx, Glyphs.digitsBold[1].d, 450, topY, emPx, '#000');
+    // Zodiac symbols at 1.3× em (they replace the date number, drawn larger)
+    const szSign = emPx * 1.3;
+    const signTopY = topY - (szSign - emPx) / 2;  // centre vertically
+    drawGlyph(ctx, Glyphs.zodiac[0].d,  540, signTopY, szSign, '#000');   // Aries
+    drawGlyph(ctx, Glyphs.zodiac[3].d,  620, signTopY, szSign, '#000');   // Cancer
+    drawGlyph(ctx, Glyphs.zodiac[6].d,  700, signTopY, szSign, '#000');   // Libra
+    drawGlyph(ctx, Glyphs.zodiac[9].d,  780, signTopY, szSign, '#000');   // Capricorn
+  }
+</script>
+
+</body>
+</html>

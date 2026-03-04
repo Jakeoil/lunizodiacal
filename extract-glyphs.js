@@ -59,6 +59,27 @@ function extractDigits(font, suffix) {
   return result;
 }
 
+// ── Extract: bold small-cap letters for month abbreviations ───────────────────
+// Month abbreviations jan feb mar apr may jun jul aug sep oct nov dec use these letters:
+const MONTH_LETTERS = [...new Set('janfebmaraprmayjunjulaugsepoctnovdec'.split(''))].sort();
+
+function extractSmallCaps(font) {
+  const byName = {};
+  for (let gi = 0; gi < font.numGlyphs; gi++) {
+    const g = font.glyphs.get(gi);
+    if (g.name) byName[g.name] = g;
+  }
+  const result = {};
+  for (const letter of MONTH_LETTERS) {
+    const glyphName = `${letter}.sc`;
+    const found = byName[glyphName];
+    if (!found) { console.warn('Missing small-cap:', glyphName); continue; }
+    const d = glyphPath(font, found);
+    if (d) result[letter] = { d, advanceWidth: found.advanceWidth / font.unitsPerEm };
+  }
+  return result;
+}
+
 // ── Extract: zodiac symbols from Noto Sans Symbols ────────────────────────────
 
 function extractZodiac(font) {
@@ -94,11 +115,15 @@ const digitsReg  = extractDigits(ebReg,  'osf');
 console.log('Extracting EB Garamond bold OSF digits...');
 const digitsBold = extractDigits(ebBold, 'osf');
 
+console.log('Extracting bold small-cap letters for month labels...');
+const smallCaps = extractSmallCaps(ebBold);
+
 console.log('Extracting zodiac symbols from Noto Sans Symbols...');
 const zodiac = extractZodiac(noto);
 
 console.log(`  digits regular: ${Object.keys(digitsReg).length}/10`);
 console.log(`  digits bold:    ${Object.keys(digitsBold).length}/10`);
+console.log(`  small caps:     ${Object.keys(smallCaps).length}/${MONTH_LETTERS.length} (${MONTH_LETTERS.join('')})`);
 console.log(`  zodiac signs:   ${Object.keys(zodiac).length}/12`);
 
 // ── Emit glyphs.js ────────────────────────────────────────────────────────────
@@ -130,6 +155,10 @@ const Glyphs = {
 
   // Old-style digits 0-9, bold weight
   digitsBold: ${JSON.stringify(digitsBold, null, 4)},
+
+  // Bold small-cap letters for month abbreviations (jan feb mar apr may jun jul aug sep oct nov dec)
+  // Key = lowercase letter.  Glyphs sit on the baseline; visual centre is at xHeight/2 above baseline.
+  smallCaps: ${JSON.stringify(smallCaps, null, 4)},
 
   // Zodiac signs 0=Aries ... 11=Pisces
   zodiac: ${JSON.stringify(zodiac, null, 4)},

@@ -322,4 +322,13 @@
   loadSeason(targetDate);
   showOverlay();
 
+  // Redraw once EB Garamond is loaded (month labels) and moon SVGs are ready.
+  Promise.all([
+    document.fonts.ready,
+    ...MOON_IMAGES.map(img => new Promise(r => {
+      if (img.complete && img.naturalWidth) r();
+      else { img.addEventListener('load', r); img.addEventListener('error', r); }
+    })),
+  ]).then(() => markDirty());
+
 }());

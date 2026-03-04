@@ -78,6 +78,87 @@ let phaseTicks    = true;
 let showMoonSymbols = true;
 let showSignSymbols = true;
 
+// ── Noto moon phase images (loaded once, drawn via drawImage) ─────────────────
+// Index 0–7 matches MOON_SYMBOL order: new, wax-crescent, 1st-qtr, wax-gibbous,
+// full, wan-gibbous, last-qtr, wan-crescent.
+const MOON_IMAGES = [];
+(function () {
+  const codes = ['1f311','1f312','1f313','1f314','1f315','1f316','1f317','1f318'];
+  codes.forEach((code, i) => {
+    const img = new Image();
+    img.src = `emoji/moon_${code}.svg`;
+    MOON_IMAGES[i] = img;
+  });
+}());
+
+// ── Glyph path rendering helpers ──────────────────────────────────────────────
+// Paths from glyphs.js use 1000 font units per em; baseline at y=1000.
+// Visual cap-height centre is at path y ≈ 675 (= 1 − capHeight/2 = 1 − 0.325).
+const _GLYPH_UPM    = 1000;
+const _EB_VCENTER   = 0.675;   // fraction of em from top to cap-height centre
+const _EB_SC_VCENTER = 0.77;   // fraction of em from top to x-height centre (for small-cap glyphs)
+const _NOTO_VCENTER = 0.5;     // zodiac symbols: centre at mid-em
+
+// Draw a string of digits (e.g. "3", "11", "28") centred at (cx, cy).
+// emSize is in world units.
+function _drawDigits(ctx, numStr, isBold, cx, cy, emSize) {
+  const table = isBold ? Glyphs.digitsBold : Glyphs.digitsReg;
+  const scale = emSize / _GLYPH_UPM;
+  const digits = String(numStr).split('').map(Number);
+  const totalW = digits.reduce((w, d) => w + table[d].advanceWidth * emSize, 0);
+  let x = cx - totalW / 2;
+  const y = cy - _EB_VCENTER * emSize;
+  for (const d of digits) {
+    const g = table[d];
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    ctx.fill(new Path2D(g.d));
+    ctx.restore();
+    x += g.advanceWidth * emSize;
+  }
+}
+
+// Draw a bold small-cap month abbreviation (e.g. "jan") centred at (cx, cy).
+// Uses true small-cap glyphs from EB Garamond Bold — guaranteed pixel-identical across browsers.
+function _drawMonth(ctx, abbr, cx, cy, emSize) {
+  const scale   = emSize / _GLYPH_UPM;
+  const letters = abbr.toLowerCase().split('');
+  const totalW  = letters.reduce((w, l) => w + (Glyphs.smallCaps[l]?.advanceWidth ?? 0) * emSize, 0);
+  let x = cx - totalW / 2;
+  const y = cy - _EB_SC_VCENTER * emSize;
+  for (const l of letters) {
+    const g = Glyphs.smallCaps[l];
+    if (!g) { x += 0.2 * emSize; continue; }
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(scale, scale);
+    ctx.fill(new Path2D(g.d));
+    ctx.restore();
+    x += g.advanceWidth * emSize;
+  }
+}
+
+// Draw a zodiac sign (0–11) centred at (cx, cy).
+function _drawZodiacPath(ctx, sign, cx, cy, emSize) {
+  const g = Glyphs.zodiac[sign];
+  const scale = emSize / _GLYPH_UPM;
+  const x = cx - g.advanceWidth * emSize / 2;
+  const y = cy - _NOTO_VCENTER * emSize;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scale, scale);
+  ctx.fill(new Path2D(g.d));
+  ctx.restore();
+}
+
+// Draw a moon phase SVG image centred at (cx, cy), size in world units.
+function _drawMoon(ctx, octant, cx, cy, size) {
+  const img = MOON_IMAGES[octant];
+  if (!img || !img.complete || !img.naturalWidth) return;
+  ctx.drawImage(img, cx - size / 2, cy - size / 2, size, size);
+}
+
 const SIGN_COLOR = [
   '#99FFCC',  // 0  Aries
   '#99FF99',  // 1  Taurus
@@ -318,35 +399,35 @@ class CalendarDate {
     }
 
     // ── Date label / sign symbol ─────────────────────────────────────────────
-    // Sign symbol replaces the date number on sign-change days.
-    let label  = this.mDate;
-    let isBold = this.mBold;
-    if (showSignSymbols && this.mSplitFraction !== null) {
-      label  = SIGN_SYMBOL[this.mTropicalPhase];
-      isBold = false;
-    }
-    const fontSize = (label === this.mDate) ? '0.25px' : '0.42px';
-    ctx.font = (isBold ? 'bold ' : '') + fontSize + ' Cambria, Georgia, serif';
+    const cx = x + 1/6;   // horizontal centre of cell
+    const cy = y + 0.25;  // vertical centre of cell
     ctx.fillStyle = this.mIsSunday ? 'red' : 'black';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(label, x + (1/6), y + 0.25);
 
-    // ── Moon phase symbols (half size, left/right of cell) ───────────────────
-    // Phase start: opening octant emoji at left; phase end: closing octant at right.
-    // x + 1/12 is left of centre; x + 1/4 is right of centre (symmetric around x+1/6).
+    if (showSignSymbols && this.mSplitFraction !== null) {
+      // Zodiac sign symbol via Path2D (replaces date number on sign-change days).
+      _drawZodiacPath(ctx, this.mTropicalPhase, cx, cy - 0.05, 0.42);
+    } else if (this.mBold) {
+      // First of month: bold all-small-caps month abbreviation via Path2D (browser-consistent).
+      _drawMonth(ctx, this.mDate, cx, cy, 0.24);
+    } else {
+      // Date number via EB Garamond old-style Path2D.
+      _drawDigits(ctx, this.mDate, false, cx, cy - 0.03, 0.36);
+    }
+
+    // ── Moon phase symbols (Noto emoji SVGs, left/right of cell) ────────────
+    // Phase start: opening octant at left edge; phase end: closing octant at right.
     if (showMoonSymbols) {
-      ctx.font = '0.125px sans-serif';
-      ctx.fillStyle = 'black';
-      ctx.textBaseline = 'middle';
+      const moonSize = 0.15;
+      // Tangent to the diagonal edge of the parallelogram cell.
+      // The left edge goes from (x, y) to (x-1/6, y+0.5); its line equation is
+      // 3px + py = 3x + y.  Distance from centre to line = moonSize/2 gives:
+      //   left tangent:  cx = x - 1/12 - moonSize * sqrt(10)/6
+      //   right tangent: cx = x + 5/12 + moonSize * sqrt(10)/6
+      const S10_6 = Math.sqrt(10) / 6;  // ≈ 0.527
       if (this.mIsPhaseStart) {
-        // Right-align against the left edge of the parallelogram at mid-height.
-        ctx.textAlign = 'right';
-        ctx.fillText(MOON_SYMBOL[this.mLunarPhase * 2],     x - 1/12, y + 0.25);
+        _drawMoon(ctx, this.mLunarPhase * 2,     x - 1/12 - moonSize * S10_6, cy, moonSize);
       } else if (this.mIsPhaseEnd) {
-        // Left-align against the right edge of the parallelogram at mid-height.
-        ctx.textAlign = 'left';
-        ctx.fillText(MOON_SYMBOL[this.mLunarPhase * 2 + 1], x + 0.5 - 1/12, y + 0.25);
+        _drawMoon(ctx, this.mLunarPhase * 2 + 1, x + 5/12 + moonSize * S10_6, cy, moonSize);
       }
     }
 

@@ -91,6 +91,15 @@ body {
   letter-spacing: 0.05em;
 }
 
+#app-title {
+  cursor: pointer;
+  user-select: none;
+}
+
+#app-title:hover {
+  color: #fff;
+}
+
 #close-picker {
   position: absolute;
   top: 8px;

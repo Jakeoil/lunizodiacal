@@ -289,6 +289,7 @@
 
   closeBtn.addEventListener('click', hideOverlay);
   openBtn.addEventListener('click', showOverlay);
+  document.getElementById('app-title').addEventListener('click', () => window.location.reload());
 
   // splitDays and phaseTicks are declared in calendarDate.js; toggling only needs a redraw.
   splitDaysChk.addEventListener('change', () => {

@@ -26,12 +26,14 @@
 
   // ── State ─────────────────────────────────────────────────────────────────
 
-  let scaling        = 1;
-  let offsetX        = 0;
-  let offsetY        = 0;
-  let targetDate     = new Date();
-  let seasonCalendar = [];
-  let bounds         = { top: 0, left: 0, bottom: 0, right: 0 };
+  let scaling          = 1;
+  let offsetX          = 0;
+  let offsetY          = 0;
+  let targetDate       = new Date();
+  let seasonCalendar   = [];
+  let seasonBoundaries = [];   // [{y, season, year}] dividers between seasons
+  let viewSeasons      = 1;    // 1 = one season, 4 = full year
+  let bounds           = { top: 0, left: 0, bottom: 0, right: 0 };
 
   // ── Season construction ───────────────────────────────────────────────────
 
@@ -48,18 +50,25 @@
   }
 
   function constructSeason(date) {
-    seasonCalendar = [];
+    seasonCalendar   = [];
+    seasonBoundaries = [];
 
     const first = findFirstInSeason(date);
     let current  = new CalendarDate(first);
     current.mPlace = { x: 0, y: 0 };
 
-    const targetSeason = current.season;
+    let trackSeason  = current.season;
+    let seasonsBuilt = 1;
 
     bounds = { top: Infinity, left: Infinity, bottom: -Infinity, right: -Infinity };
 
-    for (let i = 0; i < 200; i++) {
-      if (current.season !== targetSeason) break;
+    for (let i = 0; i < viewSeasons * 120; i++) {
+      if (current.season !== trackSeason) {
+        if (seasonsBuilt >= viewSeasons) break;
+        seasonsBuilt++;
+        seasonBoundaries.push({ y: current.mPlace.y, season: current.season, year: current.date.getFullYear() });
+        trackSeason = current.season;
+      }
 
       seasonCalendar.push(current);
       bounds.top    = Math.min(bounds.top,    current.topPoint);
@@ -99,6 +108,29 @@
     const ox = margin - bounds.left;
     const oy = 0.5;
 
+    // Season boundary dividers (year view)
+    if (seasonBoundaries.length > 0) {
+      const x0 = bounds.left + ox - 0.3;
+      const x1 = bounds.right + ox + 0.3;
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+      ctx.lineWidth   = 2 / scaling;
+      ctx.setLineDash([8 / scaling, 6 / scaling]);
+      ctx.font         = '0.28px Georgia, serif';
+      ctx.fillStyle    = 'rgba(40, 40, 40, 0.7)';
+      ctx.textBaseline = 'bottom';
+      ctx.textAlign    = 'left';
+      for (const sb of seasonBoundaries) {
+        const ly = sb.y + oy;
+        ctx.beginPath();
+        ctx.moveTo(x0, ly);
+        ctx.lineTo(x1, ly);
+        ctx.stroke();
+        ctx.fillText(`${SEASON_NAMES[sb.season]}  ${sb.year}`, x0 + 0.1, ly - 0.04);
+      }
+      ctx.restore();
+    }
+
     for (const day of seasonCalendar) {
       day.render(ctx, ox, oy);
     }
@@ -126,13 +158,19 @@
 
   function updateHeader() {
     if (seasonCalendar.length === 0) return;
-    const first  = seasonCalendar[0];
-    const season = first.season;
-    const year   = first.date.getFullYear();
-    // Winter spans two calendar years — show both with a slash.
-    const yearStr = (season === 3) ? `${year}\u2009/\u2009${year + 1}` : String(year);
-    document.getElementById('season-label').textContent =
-      `${SEASON_NAMES[season]}  ${yearStr}`;
+    const first = seasonCalendar[0];
+    const last  = seasonCalendar[seasonCalendar.length - 1];
+    if (viewSeasons > 1) {
+      const y1 = first.date.getFullYear();
+      const y2 = last.date.getFullYear();
+      document.getElementById('season-label').textContent =
+        y1 === y2 ? String(y1) : `${y1}\u2009–\u2009${y2}`;
+    } else {
+      const season  = first.season;
+      const year    = first.date.getFullYear();
+      const yearStr = (season === 3) ? `${year}\u2009/\u2009${year + 1}` : String(year);
+      document.getElementById('season-label').textContent = `${SEASON_NAMES[season]}  ${yearStr}`;
+    }
   }
 
   function loadSeason(date) {
@@ -183,16 +221,49 @@
 
   canvas.addEventListener('mouseleave', () => { isDragging = false; });
 
-  // ── Touch: single-finger drag ─────────────────────────────────────────────
+  // ── Mouse wheel zoom ───────────────────────────────────────────────────────
+
+  canvas.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+    // Zoom centred on cursor (offsetX/Y are canvas-relative; canvas left=0, top=HEADER_HEIGHT).
+    const cx = e.clientX;
+    const cy = e.clientY - HEADER_HEIGHT;
+    offsetX = cx - (cx - offsetX) * factor;
+    offsetY = cy - (cy - offsetY) * factor;
+    scaling *= factor;
+    markDirty();
+  }, { passive: false });
+
+  // ── Touch: single-finger pan + two-finger pinch-zoom ──────────────────────
 
   let touchStartTime = 0;
   let touchMoved     = 0;
   let touchDragX     = 0;
   let touchDragY     = 0;
   let touchStartY0   = 0;  // initial Y, used to detect pull-to-refresh gesture
+  let isPinching     = false;
+  let pinchDist      = 0;
+  let pinchMidX      = 0;
+  let pinchMidY      = 0;
+
+  function getTouchDist(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
 
   canvas.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      isPinching = true;
+      e.preventDefault();
+      pinchDist = getTouchDist(e.touches);
+      pinchMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      pinchMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - HEADER_HEIGHT;
+      return;
+    }
     if (e.touches.length !== 1) return;
+    isPinching     = false;
     touchStartY0   = e.touches[0].clientY;
     touchStartTime = Date.now();
     touchMoved     = 0;
@@ -203,7 +274,24 @@
   }, { passive: false });
 
   canvas.addEventListener('touchmove', (e) => {
-    if (e.touches.length !== 1) return;
+    if (e.touches.length === 2) {
+      isPinching = true;
+      e.preventDefault();
+      const newDist = getTouchDist(e.touches);
+      const newMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const newMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - HEADER_HEIGHT;
+      const factor  = newDist / pinchDist;
+      // Zoom centred on pinch midpoint, then translate by midpoint shift.
+      offsetX = newMidX - (pinchMidX - offsetX) * factor;
+      offsetY = newMidY - (pinchMidY - offsetY) * factor;
+      scaling *= factor;
+      pinchDist = newDist;
+      pinchMidX = newMidX;
+      pinchMidY = newMidY;
+      markDirty();
+      return;
+    }
+    if (e.touches.length !== 1 || isPinching) return;
     // If the swipe started near the top and is moving downward, let the
     // browser handle it as pull-to-refresh.
     if (touchStartY0 <= 80 && e.touches[0].clientY > touchStartY0) return;
@@ -220,7 +308,9 @@
 
   canvas.addEventListener('touchend', (e) => {
     e.preventDefault();
-    if (e.touches.length === 0 && Date.now() - touchStartTime < 200 && touchMoved < 5) {
+    if (e.touches.length < 2) isPinching = false;
+    if (e.touches.length === 0 && !isPinching &&
+        Date.now() - touchStartTime < 200 && touchMoved < 5) {
       handleTap();
     }
   }, { passive: false });
@@ -249,16 +339,17 @@
 
   // ── Date picker overlay ───────────────────────────────────────────────────
 
-  const overlay      = document.getElementById('picker-overlay');
-  const dateInput    = document.getElementById('date-input');
-  const todayBtn     = document.getElementById('today-btn');
-  const goBtn        = document.getElementById('go-btn');
-  const openBtn      = document.getElementById('open-picker');
-  const closeBtn     = document.getElementById('close-picker');
+  const overlay        = document.getElementById('picker-overlay');
+  const dateInput      = document.getElementById('date-input');
+  const todayBtn       = document.getElementById('today-btn');
+  const goBtn          = document.getElementById('go-btn');
+  const openBtn        = document.getElementById('open-picker');
+  const closeBtn       = document.getElementById('close-picker');
   const splitDaysChk   = document.getElementById('split-days');
   const phaseTicksChk  = document.getElementById('phase-ticks');
   const moonSymbolsChk = document.getElementById('moon-symbols');
   const signSymbolsChk = document.getElementById('sign-symbols');
+  const viewModeSelect = document.getElementById('view-mode');
 
   function showOverlay() { overlay.classList.remove('hidden'); }
   function hideOverlay()  { overlay.classList.add('hidden');    }
@@ -291,7 +382,13 @@
   openBtn.addEventListener('click', showOverlay);
   document.getElementById('app-title').addEventListener('click', () => window.location.reload());
 
-  // splitDays and phaseTicks are declared in calendarDate.js; toggling only needs a redraw.
+  viewModeSelect.addEventListener('change', () => {
+    viewSeasons = parseInt(viewModeSelect.value, 10);
+    loadSeason(targetDate);
+    hideOverlay();
+  });
+
+// splitDays and phaseTicks are declared in calendarDate.js; toggling only needs a redraw.
   splitDaysChk.addEventListener('change', () => {
     splitDays = splitDaysChk.checked;
     markDirty();

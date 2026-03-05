@@ -161,3 +161,18 @@ body {
   cursor: pointer;
   user-select: none;
 }
+
+.picker-select-row {
+  justify-content: space-between;
+}
+
+.picker-select-row select {
+  background: #222;
+  color: #eee;
+  border: 1px solid #666;
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+

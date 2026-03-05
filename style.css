@@ -59,6 +59,7 @@ body {
   left: 0;
   width: 100vw;
   height: calc(100vh - 44px);
+  touch-action: none;   /* let JS handle all gestures; enables pinch-zoom on Android */
 }
 
 /* ── Date picker overlay ────────────────────────────────────────────────── */

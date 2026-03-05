@@ -270,13 +270,20 @@
   }, { passive: false });
 
   canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
     if (e.touches.length === 2) {
-      isPinching = true;
-      e.preventDefault();
       const newDist = getTouchDist(e.touches);
       const newMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
       const newMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - HEADER_HEIGHT;
-      const factor  = newDist / pinchDist;
+      if (!isPinching) {
+        // Second finger arrived; initialise without applying to avoid a jump.
+        isPinching = true;
+        pinchDist  = newDist;
+        pinchMidX  = newMidX;
+        pinchMidY  = newMidY;
+        return;
+      }
+      const factor = newDist / pinchDist;
       // Zoom centred on pinch midpoint, then translate by midpoint shift.
       offsetX = newMidX - (pinchMidX - offsetX) * factor;
       offsetY = newMidY - (pinchMidY - offsetY) * factor;
@@ -288,7 +295,6 @@
       return;
     }
     if (e.touches.length !== 1 || isPinching) return;
-    e.preventDefault();
     const dx = e.touches[0].clientX - touchDragX;
     const dy = e.touches[0].clientY - touchDragY;
     touchMoved += Math.abs(dx) + Math.abs(dy);

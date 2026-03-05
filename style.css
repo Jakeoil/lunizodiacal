@@ -164,6 +164,30 @@ body {
   user-select: none;
 }
 
+/* ── Print ──────────────────────────────────────────────────────────────── */
+
+#print-container {
+  display: none;
+}
+
+@media print {
+  body > *:not(#print-container) { display: none !important; }
+  #print-container {
+    display: block !important;
+    width: 7.5in;
+    margin: 0 auto;
+  }
+  #print-canvas {
+    display: block;
+    width: 7.5in;
+    height: 10in;
+  }
+  @page {
+    size: letter portrait;
+    margin: 0.5in;
+  }
+}
+
 .picker-select-row {
   justify-content: space-between;
 }

@@ -348,6 +348,7 @@
   const phaseTicksChk  = document.getElementById('phase-ticks');
   const moonSymbolsChk = document.getElementById('moon-symbols');
   const signSymbolsChk = document.getElementById('sign-symbols');
+  const printBtn       = document.getElementById('print-btn');
   const viewModeSelect = document.getElementById('view-mode');
 
   function showOverlay() { overlay.classList.remove('hidden'); }
@@ -381,6 +382,8 @@
   openBtn.addEventListener('click', showOverlay);
   document.getElementById('app-title').addEventListener('click', () => window.location.reload());
 
+  printBtn.addEventListener('click', printSeason);
+
   viewModeSelect.addEventListener('change', () => {
     viewSeasons = parseInt(viewModeSelect.value, 10);
     loadSeason(targetDate);
@@ -411,6 +414,76 @@
   dateInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') goBtn.click();
   });
+
+  // ── Print ─────────────────────────────────────────────────────────────────
+
+  function printSeason() {
+    if (seasonCalendar.length === 0) return;
+    hideOverlay();
+
+    // Always print exactly one season regardless of current view mode.
+    const pCal    = [];
+    const pBounds = { top: Infinity, left: Infinity, bottom: -Infinity, right: -Infinity };
+    const pFirst  = findFirstInSeason(targetDate);
+    let   pCur    = new CalendarDate(pFirst);
+    pCur.mPlace   = { x: 0, y: 0 };
+    const pSeason = pCur.season;
+    for (let i = 0; i < 120; i++) {
+      if (pCur.season !== pSeason) break;
+      pCal.push(pCur);
+      pBounds.top    = Math.min(pBounds.top,    pCur.topPoint);
+      pBounds.left   = Math.min(pBounds.left,   pCur.leftPoint);
+      pBounds.bottom = Math.max(pBounds.bottom, pCur.bottomPoint);
+      pBounds.right  = Math.max(pBounds.right,  pCur.rightPoint);
+      pCur = pCur.next();
+    }
+
+    // Render into the hidden print canvas (1125×1500 px = 7.5"×10" at 150 dpi).
+    const pc      = document.getElementById('print-canvas');
+    const pctx    = pc.getContext('2d');
+    const PW      = pc.width;    // 1125
+    const PH      = pc.height;   // 1500
+    const LABEL_H = 110;         // px reserved for heading
+
+    pctx.setTransform(1, 0, 0, 1, 0, 0);
+    pctx.fillStyle = '#fff';
+    pctx.fillRect(0, 0, PW, PH);
+
+    // Season heading
+    const headSeason  = pCal[0].season;
+    const headYear    = pCal[0].date.getFullYear();
+    const headYearStr = (headSeason === 3) ? `${headYear} / ${headYear + 1}` : String(headYear);
+    pctx.fillStyle    = '#000';
+    pctx.font         = 'italic 54px Georgia, serif';
+    pctx.textAlign    = 'center';
+    pctx.textBaseline = 'middle';
+    pctx.fillText(`${SEASON_NAMES[headSeason]}  ${headYearStr}`, PW / 2, LABEL_H / 2);
+
+    // Fit season grid into the area below the heading.
+    const wW  = pBounds.right - pBounds.left;
+    const wH  = (pBounds.bottom - pBounds.top) + 1.0;
+    const sc  = Math.min(PW / (wW + 0.5), (PH - LABEL_H) / wH) * 0.93;
+    const ox  = 0.25 - pBounds.left;
+    const oy  = 0.5;
+    const oX  = PW / 2 - (0.25 + wW / 2) * sc;
+    const oY  = LABEL_H + (-0.25 - pBounds.top) * sc;
+
+    pctx.setTransform(sc, 0, 0, sc, oX, oY);
+    for (const day of pCal) {
+      day.render(pctx, ox, oy);
+    }
+    pctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    // Show container, print, then hide again after the dialog closes.
+    const container = document.getElementById('print-container');
+    container.style.display = 'block';
+    window.print();
+    const cleanup = () => {
+      container.style.display = 'none';
+      window.removeEventListener('afterprint', cleanup);
+    };
+    window.addEventListener('afterprint', cleanup);
+  }
 
   // ── Bootstrap ─────────────────────────────────────────────────────────────
 

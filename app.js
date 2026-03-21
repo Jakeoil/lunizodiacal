@@ -386,7 +386,6 @@
 
   viewModeSelect.addEventListener('change', () => {
     if (viewModeSelect.value === 'help') {
-      viewModeSelect.value = String(viewSeasons); // reset select
       window.location.href = 'about.html';
       return;
     }

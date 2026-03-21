@@ -385,10 +385,6 @@
   printBtn.addEventListener('click', printSeason);
 
   viewModeSelect.addEventListener('change', () => {
-    if (viewModeSelect.value === 'help') {
-      window.location.href = 'about.html';
-      return;
-    }
     viewSeasons = parseInt(viewModeSelect.value, 10);
     loadSeason(targetDate);
     hideOverlay();

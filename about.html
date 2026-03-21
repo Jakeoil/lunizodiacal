@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>About — Coylendar</title>
+  <title>Help — Coylendar</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #1e1e1e;
-      color: #ddd;
+      background: #999;
+      color: #222;
       font-family: Georgia, 'Times New Roman', serif;
       line-height: 1.6;
       padding: 2rem 1.5rem 4rem;
@@ -17,30 +17,36 @@
       margin: 0 auto;
     }
 
-    a { color: #8cf; }
-    a:hover { color: #bdf; }
+    a { color: #335; }
+    a:hover { color: #000; }
 
     h1 {
       font-size: 1.6rem;
-      color: #eee;
+      color: #111;
       margin-bottom: 0.3rem;
       letter-spacing: 0.05em;
     }
 
     h2 {
       font-size: 1.15rem;
-      color: #ccc;
+      color: #333;
       margin-top: 2rem;
       margin-bottom: 0.6rem;
-      border-bottom: 1px solid #444;
+      border-bottom: 1px solid #777;
       padding-bottom: 4px;
+    }
+
+    h3 {
+      color: #444;
+      font-size: 0.95rem;
+      margin: 1rem 0 0.5rem;
     }
 
     p { margin-bottom: 1em; }
 
     .intro {
       font-style: italic;
-      color: #bbb;
+      color: #333;
       margin-bottom: 1.5rem;
     }
 
@@ -55,9 +61,9 @@
     .zodiac-table th {
       text-align: left;
       font-size: 0.85rem;
-      color: #999;
+      color: #555;
       padding: 4px 10px;
-      border-bottom: 1px solid #444;
+      border-bottom: 1px solid #777;
     }
 
     .zodiac-table td {
@@ -91,7 +97,7 @@
 
     .moon-table td {
       padding: 5px 10px;
-      color: #ddd;
+      color: #222;
       font-size: 0.95rem;
     }
 
@@ -104,7 +110,7 @@
     .moon-table td.dash {
       text-align: center;
       width: 24px;
-      color: #888;
+      color: #666;
     }
 
     /* ── Details list ─────────────────────────────────────────────────── */
@@ -120,7 +126,7 @@
     }
 
     .details li strong {
-      color: #eee;
+      color: #111;
     }
 
     /* ── Usage list ───────────────────────────────────────────────────── */
@@ -135,7 +141,7 @@
     }
 
     .usage li strong {
-      color: #eee;
+      color: #111;
     }
 
     /* ── Back link ────────────────────────────────────────────────────── */
@@ -144,11 +150,11 @@
       display: inline-block;
       margin-bottom: 1.5rem;
       font-size: 0.9rem;
-      color: #aaa;
+      color: #444;
       text-decoration: none;
     }
 
-    .back:hover { color: #fff; }
+    .back:hover { color: #000; }
   </style>
 </head>
 <body>
@@ -165,7 +171,7 @@
 
   <h2>Legend</h2>
 
-  <h3 style="color:#aaa; font-size:0.95rem; margin:1rem 0 0.5rem;">Zodiac signs</h3>
+  <h3>Zodiac signs</h3>
 
   <table class="zodiac-table">
     <tr><th>Season</th><th></th><th>Sign</th></tr>
@@ -183,7 +189,7 @@
     <tr bgcolor="#66FFFF"><td></td><td class="glyph"><img src="zodiac/pisces.svg" height="18"></td><td>Pisces</td></tr>
   </table>
 
-  <h3 style="color:#aaa; font-size:0.95rem; margin:0 0 0.5rem;">Moon phases</h3>
+  <h3>Moon phases</h3>
 
   <table class="moon-table">
     <tr><td class="emoji">🌑</td><td>New Moon</td><td class="dash">—</td><td>Waxing Crescent</td><td class="emoji">🌒</td></tr>
@@ -213,9 +219,9 @@
     <li><strong>Zoom</strong> — scroll wheel or pinch</li>
     <li><strong>Next season</strong> — tap the canvas</li>
     <li><strong>Previous season</strong> — double-tap the canvas</li>
-    <li><strong>Jump to date</strong> — open the date picker (📅 button)</li>
+    <li><strong>Jump to date</strong> — open the date picker (☰ menu)</li>
     <li><strong>Print</strong> — renders the current season at 150 dpi on letter-size paper</li>
-    <li><strong>Year view</strong> — select "Year (4 seasons)" in the picker</li>
+    <li><strong>Year view</strong> — select "Year (4 seasons)" in the menu</li>
   </ul>
 
 </body>

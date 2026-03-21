@@ -385,7 +385,7 @@
   printBtn.addEventListener('click', printSeason);
 
   viewModeSelect.addEventListener('change', () => {
-    if (viewModeSelect.value === 'about') {
+    if (viewModeSelect.value === 'help') {
       viewModeSelect.value = String(viewSeasons); // reset select
       window.open('about.html', '_blank');
       return;

@@ -322,15 +322,15 @@
     lastClickTime  = now;
 
     if (isDouble) {
-      const d = new Date(targetDate);
-      d.setMonth(d.getMonth() - 3);
-      loadSeason(d);
+      // Previous season: go 1 day before the first day of the current season.
+      const first = seasonCalendar[0].date;
+      loadSeason(new Date(first.getFullYear(), first.getMonth(), first.getDate() - 1));
     } else {
       setTimeout(() => {
         if (Date.now() - lastClickTime >= 290) {
-          const d = new Date(targetDate);
-          d.setMonth(d.getMonth() + 3);
-          loadSeason(d);
+          // Next season: go 1 day after the last day of the current season.
+          const last = seasonCalendar[seasonCalendar.length - 1].date;
+          loadSeason(new Date(last.getFullYear(), last.getMonth(), last.getDate() + 1));
         }
       }, 310);
     }

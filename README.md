@@ -50,7 +50,9 @@ Visual markers:
 
 ## Usage
 
-Open `index.html` via a local HTTP server (required for font and image loading) — no build step, no npm dependencies.
+Try it live: https://jakeoil.github.io/lunizodiacal
+
+Or open `index.html` via a local HTTP server (required for font and image loading) — no build step, no npm dependencies.
 
 - **Pan**: drag (mouse or single-finger touch)
 - **Zoom**: scroll wheel (desktop) or pinch (mobile)

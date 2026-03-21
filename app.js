@@ -387,7 +387,7 @@
   viewModeSelect.addEventListener('change', () => {
     if (viewModeSelect.value === 'help') {
       viewModeSelect.value = String(viewSeasons); // reset select
-      window.open('about.html', '_blank');
+      window.location.href = 'about.html';
       return;
     }
     viewSeasons = parseInt(viewModeSelect.value, 10);

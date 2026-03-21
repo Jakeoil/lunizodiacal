@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — Coylendar</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1e1e1e;
+      color: #ddd;
+      font-family: Georgia, 'Times New Roman', serif;
+      line-height: 1.6;
+      padding: 2rem 1.5rem 4rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    a { color: #8cf; }
+    a:hover { color: #bdf; }
+
+    h1 {
+      font-size: 1.6rem;
+      color: #eee;
+      margin-bottom: 0.3rem;
+      letter-spacing: 0.05em;
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      color: #ccc;
+      margin-top: 2rem;
+      margin-bottom: 0.6rem;
+      border-bottom: 1px solid #444;
+      padding-bottom: 4px;
+    }
+
+    p { margin-bottom: 1em; }
+
+    .intro {
+      font-style: italic;
+      color: #bbb;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Zodiac table ─────────────────────────────────────────────────── */
+
+    .zodiac-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .zodiac-table th {
+      text-align: left;
+      font-size: 0.85rem;
+      color: #999;
+      padding: 4px 10px;
+      border-bottom: 1px solid #444;
+    }
+
+    .zodiac-table td {
+      padding: 5px 10px;
+      color: #222;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .zodiac-table td.season {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .zodiac-table td.glyph {
+      width: 30px;
+      text-align: center;
+    }
+
+    .zodiac-table img {
+      vertical-align: middle;
+    }
+
+    /* ── Moon table ───────────────────────────────────────────────────── */
+
+    .moon-table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 1.5rem;
+    }
+
+    .moon-table td {
+      padding: 5px 10px;
+      color: #ddd;
+      font-size: 0.95rem;
+    }
+
+    .moon-table td.emoji {
+      font-size: 1.3rem;
+      text-align: center;
+      width: 36px;
+    }
+
+    .moon-table td.dash {
+      text-align: center;
+      width: 24px;
+      color: #888;
+    }
+
+    /* ── Details list ─────────────────────────────────────────────────── */
+
+    .details {
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .details li {
+      margin-bottom: 0.5em;
+      padding-left: 0;
+    }
+
+    .details li strong {
+      color: #eee;
+    }
+
+    /* ── Usage list ───────────────────────────────────────────────────── */
+
+    .usage {
+      list-style: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .usage li {
+      margin-bottom: 0.4em;
+    }
+
+    .usage li strong {
+      color: #eee;
+    }
+
+    /* ── Back link ────────────────────────────────────────────────────── */
+
+    .back {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      color: #aaa;
+      text-decoration: none;
+    }
+
+    .back:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+  <a class="back" href="index.html">&larr; Back to calendar</a>
+
+  <h1>Coylendar</h1>
+  <p class="intro">
+    A lunizodiacal calendar — displaying the interplay of the tropical solar year
+    and the synodic lunar cycle.  Each day is a colored parallelogram: the color
+    shows where the Sun sits in the zodiac, and the rows follow the Moon through
+    its phases. One screen shows roughly one astronomical season.
+  </p>
+
+  <h2>Legend</h2>
+
+  <h3 style="color:#aaa; font-size:0.95rem; margin:1rem 0 0.5rem;">Zodiac signs</h3>
+
+  <table class="zodiac-table">
+    <tr><th>Season</th><th></th><th>Sign</th></tr>
+    <tr bgcolor="#99FFCC"><td class="season">Spring</td><td class="glyph"><img src="zodiac/aries.svg" height="18"></td><td>Aries</td></tr>
+    <tr bgcolor="#99FF99"><td></td><td class="glyph"><img src="zodiac/taurus.svg" height="18"></td><td>Taurus</td></tr>
+    <tr bgcolor="#CCFF99"><td></td><td class="glyph"><img src="zodiac/gemini.svg" height="18"></td><td>Gemini</td></tr>
+    <tr bgcolor="#FFFF99"><td class="season">Summer</td><td class="glyph"><img src="zodiac/cancer.svg" height="18"></td><td>Cancer</td></tr>
+    <tr bgcolor="#FFCC99"><td></td><td class="glyph"><img src="zodiac/leo.svg" height="18"></td><td>Leo</td></tr>
+    <tr bgcolor="#FF9999"><td></td><td class="glyph"><img src="zodiac/virgo.svg" height="18"></td><td>Virgo</td></tr>
+    <tr bgcolor="#FF99CC"><td class="season">Autumn</td><td class="glyph"><img src="zodiac/libra.svg" height="18"></td><td>Libra</td></tr>
+    <tr bgcolor="#FF99FF"><td></td><td class="glyph"><img src="zodiac/scorpio.svg" height="18"></td><td>Scorpio</td></tr>
+    <tr bgcolor="#CCCCFF"><td></td><td class="glyph"><img src="zodiac/sagittarius.svg" height="18"></td><td>Sagittarius</td></tr>
+    <tr bgcolor="#99CCFF"><td class="season">Winter</td><td class="glyph"><img src="zodiac/capricorn.svg" height="18"></td><td>Capricorn</td></tr>
+    <tr bgcolor="#66CCFF"><td></td><td class="glyph"><img src="zodiac/aquarius.svg" height="18"></td><td>Aquarius</td></tr>
+    <tr bgcolor="#66FFFF"><td></td><td class="glyph"><img src="zodiac/pisces.svg" height="18"></td><td>Pisces</td></tr>
+  </table>
+
+  <h3 style="color:#aaa; font-size:0.95rem; margin:0 0 0.5rem;">Moon phases</h3>
+
+  <table class="moon-table">
+    <tr><td class="emoji">🌑</td><td>New Moon</td><td class="dash">—</td><td>Waxing Crescent</td><td class="emoji">🌒</td></tr>
+    <tr><td class="emoji">🌓</td><td>First Quarter</td><td class="dash">—</td><td>Waxing Gibbous</td><td class="emoji">🌔</td></tr>
+    <tr><td class="emoji">🌕</td><td>Full Moon</td><td class="dash">—</td><td>Waning Gibbous</td><td class="emoji">🌖</td></tr>
+    <tr><td class="emoji">🌗</td><td>Last Quarter</td><td class="dash">—</td><td>Waning Crescent</td><td class="emoji">🌘</td></tr>
+  </table>
+
+  <h2>What it shows</h2>
+
+  <ul class="details">
+    <li><strong>Color</strong> — tropical zodiac sign of the Sun (12 hues, one per sign)</li>
+    <li><strong>Split cells</strong> — days where the Sun crosses a sign boundary are divided into two colored halves</li>
+    <li><strong>Date numbers</strong> — old-style numerals rendered as vector outlines for cross-browser consistency</li>
+    <li><strong>Month labels</strong> — bold small-cap abbreviations on the first of each month</li>
+    <li><strong>Zodiac symbols</strong> — on sign-change days the date number is replaced by the zodiac glyph</li>
+    <li><strong>Moon symbols</strong> — phase emoji positioned tangent to the diagonal cell edge at phase start/end</li>
+    <li><strong>Red text</strong> — Sundays</li>
+    <li><strong>Thick top line</strong> — the week containing a new moon</li>
+    <li><strong>Phase ticks</strong> — small marks at lunar phase boundaries</li>
+  </ul>
+
+  <h2>Usage</h2>
+
+  <ul class="usage">
+    <li><strong>Pan</strong> — drag (mouse or single-finger touch)</li>
+    <li><strong>Zoom</strong> — scroll wheel or pinch</li>
+    <li><strong>Next season</strong> — tap the canvas</li>
+    <li><strong>Previous season</strong> — double-tap the canvas</li>
+    <li><strong>Jump to date</strong> — open the date picker (📅 button)</li>
+    <li><strong>Print</strong> — renders the current season at 150 dpi on letter-size paper</li>
+    <li><strong>Year view</strong> — select "Year (4 seasons)" in the picker</li>
+  </ul>
+
+</body>
+</html>

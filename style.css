@@ -38,17 +38,17 @@ body {
 }
 
 #open-picker {
-  background: none;
-  border: 1px solid #666;
+  background: #aaa;
+  border: 1px solid #999;
   border-radius: 4px;
-  color: #333;
-  font-size: 1.1rem;
-  padding: 4px 8px;
+  color: #222;
+  font-size: 1.4rem;
+  padding: 4px 10px;
   cursor: pointer;
 }
 
 #open-picker:hover {
-  background: #777;
+  background: #bbb;
 }
 
 /* ── Canvas ─────────────────────────────────────────────────────────────── */
@@ -146,19 +146,6 @@ body {
 
 .picker-buttons button:hover {
   background: #444;
-}
-
-#about-link {
-  display: block;
-  text-align: center;
-  color: #aaa;
-  font-family: Georgia, serif;
-  font-size: 0.85rem;
-  text-decoration: none;
-}
-
-#about-link:hover {
-  color: #fff;
 }
 
 .picker-settings {

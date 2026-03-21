@@ -385,6 +385,11 @@
   printBtn.addEventListener('click', printSeason);
 
   viewModeSelect.addEventListener('change', () => {
+    if (viewModeSelect.value === 'about') {
+      viewModeSelect.value = String(viewSeasons); // reset select
+      window.open('about.html', '_blank');
+      return;
+    }
     viewSeasons = parseInt(viewModeSelect.value, 10);
     loadSeason(targetDate);
     hideOverlay();
@@ -490,7 +495,6 @@
   resizeCanvas();
   dateInput.value = formatDateValue(targetDate);
   loadSeason(targetDate);
-  showOverlay();
 
   // Redraw once EB Garamond is loaded (month labels) and moon SVGs are ready.
   Promise.all([

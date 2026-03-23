@@ -38,14 +38,22 @@ body {
 }
 
 #open-picker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #ddd;
   border: 1px solid #bbb;
   border-radius: 4px;
-  color: #222;
-  font-size: 1.6rem;
-  font-weight: bold;
-  padding: 6px 14px;
+  padding: 4px;
   cursor: pointer;
+  width: 36px;
+  height: 36px;
+}
+
+#open-picker img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 #open-picker:hover {
@@ -62,10 +70,11 @@ body {
   color: #222;
   font-size: 1.4rem;
   font-weight: bold;
-  padding: 4px 10px;
   cursor: pointer;
   text-decoration: none;
   margin-left: 8px;
+  width: 36px;
+  height: 36px;
 }
 
 #help-btn:hover {

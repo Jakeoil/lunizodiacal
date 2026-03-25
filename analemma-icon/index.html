@@ -33,10 +33,27 @@
       font-size: 0.8rem;
       color: #aaa;
     }
+    .versions {
+      margin-bottom: 1.5rem;
+      font-size: 0.95rem;
+    }
+    .versions a {
+      color: #8cf;
+      text-decoration: none;
+    }
+    .versions a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
   <h1>Analemma Icon — Standard Sizes</h1>
+  <p class="versions">Versions:
+    <a href="#" onclick="setSrc('analemma.svg'); return false"><b>current</b></a> |
+    <a href="#" onclick="setSrc('analemma.v1.svg'); return false">v1</a> |
+    <a href="#" onclick="setSrc('analemma.v2.svg'); return false">v2</a> |
+    <a href="#" onclick="setSrc('analemma.v3.svg'); return false">v3</a>
+  </p>
   <div class="grid">
     <div class="icon-box">
       <img src="analemma.svg" width="16" height="16">
@@ -75,5 +92,10 @@
       <span class="label">600 &times; 600 (native)</span>
     </div>
   </div>
+  <script>
+    function setSrc(file) {
+      document.querySelectorAll('.grid img').forEach(img => img.src = file);
+    }
+  </script>
 </body>
 </html>
